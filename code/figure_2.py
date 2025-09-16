@@ -1,22 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
+from model import ode_model
 
 colors = ['red', 'blue']
 
-a  = 0.1
-b  = 0.1
-K  = 0.2
-
-V1 = 1.0
-V2 = 1.5
-K1 = 0.01
-K2 = 0.01
-
-V3 = 6.0
-V4 = 2.5
-K3 = 0.01
-K4 = 0.01
+param_dict = {
+    'a': 0.1,
+    'b': 0.1,
+    'K': 0.2,
+    'V1': 1.0,
+    'V2': 1.5,
+    'K1': 0.01,
+    'K2': 0.01,
+    'V3': 6.0,
+    'V4': 2.5,
+    'K3': 0.01,
+    'K4': 0.01
+}
 
 # Definitions of nullclines / steady-state functions
 

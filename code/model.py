@@ -1,4 +1,4 @@
-def rhs(t, y, param_dict):
+def ode_model(t, y, param_dict):
     P, Q, R = y
     dP = param_dict['a']*Q - param_dict['b'] * P / (param_dict['K'] + P)
     dQ = param_dict['V1'] * (1 - Q) / (param_dict['K1'] + (1 - Q)) - param_dict['V2'] * R * Q / (param_dict['K2'] + Q)
