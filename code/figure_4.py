@@ -28,13 +28,15 @@ param_dict = {
     'K4': 0.01
 }
 
-plt.figure()#figsize=(6,4))
+plt.figure()
 
 for i, V4 in enumerate(V4s):
     param_dict['V4'] = V4
-    sol  = solve_ivp(ode_model, [0, 50], [P_0, Q_0, R_0], args=(param_dict,))
+    sol  = solve_ivp(ode_model, [0, 140], [P_0, Q_0, R_0], method='RK23', args=(param_dict,),dense_output=True)
     plt.plot(sol.t, sol.y[0], label = f'V4={np.round(V4,1)}', color=colors[i])
 
 plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.xlabel('Time')
+plt.ylabel('P', rotation=0)
 plt.tight_layout()
 plt.savefig('figure_4_different_V4.png')
