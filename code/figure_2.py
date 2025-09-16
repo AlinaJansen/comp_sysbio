@@ -29,7 +29,7 @@ def R_ss(P):
     """
     # Define function whose root is steady-state R
     def f(R):
-        return V3 * P * (1 - R)/(K3 + (1 - R)) - V4 * R/(K4 + R)
+        return param_dict['V3'] * P * (1 - R)/(param_dict['K3'] + (1 - R)) - param_dict['V4'] * R/(param_dict['K4'] + R)
     # Provide an initial guess for R
     # We can try two guesses and pick the one in [0,1]
     R_guess = 1.0
@@ -45,7 +45,7 @@ def Q_ss(R):
     Returns Q in [0,1]
     """
     def f(Q):
-        return V1 * (1 - Q)/(K1 + (1 - Q)) - V2 * R * Q/(K2 + Q)
+        return param_dict['V1'] * (1 - Q)/(param_dict['K1'] + (1 - Q)) - param_dict['V2'] * R * Q/(param_dict['K2'] + Q)
     Q_guess = 1
     Q_solution, info, ier, mesg = fsolve(f, Q_guess, full_output=True)
     Q_solution = np.clip(Q_solution, 0.0, 1.0)
@@ -86,4 +86,4 @@ axes[1].set_ylabel('Q (intake, steady-state)')
 axes[1].set_title('Threshold: Q vs R')
 axes[1].grid(True)
 
-plt.show('figure_2_thresholds.png')
+plt.savefig('figure_2_thresholds.png')
