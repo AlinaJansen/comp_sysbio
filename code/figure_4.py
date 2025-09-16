@@ -30,21 +30,18 @@ param_dict = {
     'K4': 0.01
 }
 
-fig, axs = plt.subplots(2)
+
+plt.figure()
 
 # solve ODEs for each V4 and plot P over time
 for i, V4 in enumerate(V4s):
     param_dict['V4'] = V4
     sol  = solve_ivp(ode_model, [0, 140], [P_0, Q_0, R_0], method='RK23', args=(param_dict,),dense_output=True)
     # plot whole solution
-    axs[0].plot(sol.t, sol.y[0], label = f'V4={np.round(V4,1)}', color=colors[i])
-    # plot min and max of P
-    axs[1].scatter([i+1,i+1], [min(sol.y[0]), max(sol.y[0])], color=colors[i])
+    plt.plot(sol.t, sol.y[0], label = f'V4={np.round(V4,1)}', color=colors[i])
 
-axs[0].set(xlabel='Time', ylabel='P')
-axs[1].set_xticks(range(1,11), [np.round(v,1) for v in V4s], rotation=45)
-axs[1].set(xlabel='V4', ylabel='Min/Max P')
-# big legend -> outside of plot
-axs[0].legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-fig.tight_layout()
-fig.savefig('figure_4_different_V4.png')
+plt.xlabel('Time')
+plt.ylabel('P')
+plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+plt.tight_layout()
+plt.savefig('figure_4_different_V4.png')
