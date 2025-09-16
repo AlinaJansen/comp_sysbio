@@ -79,32 +79,30 @@ axs = gs.subplots(sharex=True)
 for i, V4 in enumerate(V4s):
     param_dict['V4'] = V4
     sol  = solve_ivp(ode_model, [0, 140], [P_0, Q_0, R_0], method='RK23', args=(param_dict,),dense_output=True)
-    # plot min and max of P
-    axs[0].scatter(i+1, min(sol.y[0]), color='black', marker='^', s=8)
-    axs[0].scatter(i+1, max(sol.y[0]), color='black', marker='v', s=8)
-    axs[0].scatter(i+1, sstates[i,0], color='black', marker='*', s=10) # steady state
-    axs[0].set(xlabel='V4', ylabel='P')
-    # plot min and max of Q
-    axs[1].scatter(i+1, min(sol.y[1]), color='black', marker='^', s=8)
-    axs[1].scatter(i+1, max(sol.y[1]), color='black', marker='v', s=8)
-    axs[1].scatter(i+1, sstates[i,1], color='black', marker='*', s=10) # steady state
-    axs[1].set(xlabel='V4', ylabel='Q')
-    # plot min and max of R
-    axs[2].scatter(i+1, min(sol.y[2]), color='black', marker='^', s=8)
-    axs[2].scatter(i+1, max(sol.y[2]), color='black', marker='v', s=8)
-    axs[2].scatter(i+1, sstates[i,2], color='black', marker='*', s=10) # steady state
-    axs[2].set(xlabel='V4', ylabel='R')
+    for j in range(3):
+        axs[j].scatter(i+1, min(sol.y[j]), color='black', marker='^', s=8)
+        axs[j].scatter(i+1, max(sol.y[j]), color='black', marker='v', s=8)
+        c = 'black' # stable
+        if max_reals[i] > 0:
+            c = 'red' # unstable
+        axs[j].scatter(i+1, sstates[i,j], color=c, marker='*', s=10) # steady state
+
 for i in range(3):
     axs[i].set_xticks(range(1,11), [np.round(v,1) for v in V4s])
+
+axs[0].set(xlabel='V4', ylabel='P')
+axs[1].set(xlabel='V4', ylabel='Q')
+axs[2].set(xlabel='V4', ylabel='R')
 
 # Hide x labels and tick labels for all but bottom plot.
 for ax in axs:
     ax.label_outer()
 
 # build custom legend
-legend_elems = [Line2D([0], [0], marker='^', label='min', markersize=8, color='w', markerfacecolor='black'),
-                Line2D([0], [0], marker='*', label='sstate', markersize=10, color='w', markerfacecolor='black'),
-                Line2D([0], [0], marker='v', label='max', markersize=8, color='w', markerfacecolor='black')]
-axs[0].legend(handles=legend_elems, loc='upper left')
+legend_elems = [Line2D([0], [0], marker='^', label='min', markersize=6, color='w', markerfacecolor='black'),
+                Line2D([0], [0], marker='*', label='stable sstate', markersize=8, color='w', markerfacecolor='black'),
+                Line2D([0], [0], marker='*', label='unstable sstate', markersize=8, color='w', markerfacecolor='red'),
+                Line2D([0], [0], marker='v', label='max', markersize=6, color='w', markerfacecolor='black')]
+axs[0].legend(handles=legend_elems, fontsize='x-small', loc='upper left')
 
 fig.savefig('sstate_analysis_V4_figure.png')
