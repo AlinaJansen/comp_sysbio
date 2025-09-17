@@ -19,7 +19,6 @@ param_dict = {
     'K4': 0.01
 }
 
-# Definitions of nullclines / steady-state functions
 
 def R_ss(P):
     """
@@ -27,15 +26,10 @@ def R_ss(P):
       V3 * P * (1 - R)/(K3 + (1 - R)) - V4 * R/(K4 + R) = 0
     Returns R in [0,1]
     """
-    # Define function whose root is steady-state R
     def f(R):
-        return V3 * P * (1 - R)/(K3 + (1 - R)) - V4 * R/(K4 + R)
-    # Provide an initial guess for R
-    # We can try two guesses and pick the one in [0,1]
+        return param_dict['V3'] * P * (1 - R)/(param_dict['K3'] + (1 - R)) - param_dict['V4'] * R/(param_dict['K4'] + R)
     R_guess = 1.0
     R_solution, info, ier, mesg = fsolve(f, R_guess, full_output=True)
-    # # Clamping between 0 and 1
-    # R_solution = np.clip(R_solution, 0.0, 1.0)
     return R_solution, ier
 
 def Q_ss(R):
@@ -45,13 +39,12 @@ def Q_ss(R):
     Returns Q in [0,1]
     """
     def f(Q):
-        return V1 * (1 - Q)/(K1 + (1 - Q)) - V2 * R * Q/(K2 + Q)
+        return param_dict['V1'] * (1 - Q)/(param_dict['K1'] + (1 - Q)) - param_dict['V2'] * R * Q/(param_dict['K2'] + Q)
     Q_guess = 1
     Q_solution, info, ier, mesg = fsolve(f, Q_guess, full_output=True)
     Q_solution = np.clip(Q_solution, 0.0, 1.0)
     return Q_solution, ier
 
-# Prepare P grid, compute R_ss for each
 P_vals = np.linspace(0, 1, 500)
 R_vals = []
 solved_R = []
@@ -61,7 +54,6 @@ for p in P_vals:
     solved_R.append(ier)
 solved_R = [1 if i == 1 else 0 for i in solved_R]
 
-# Prepare R grid, compute Q_ss for each
 R_grid = np.linspace(0, 1, 500)
 Q_vals = []
 solved_Q = []
@@ -86,4 +78,4 @@ axes[1].set_ylabel('Q (intake, steady-state)')
 axes[1].set_title('Threshold: Q vs R')
 axes[1].grid(True)
 
-plt.show('figure_2_thresholds.png')
+plt.savefig('figures/figure_2_thresholds.png', dpi=300)
