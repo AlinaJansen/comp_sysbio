@@ -67,12 +67,24 @@ param_dict = {
     'K4': 0.01
 }
 
+# disables plotting, recommended for large scans
+# stable steady states are always printed to console
+disable_plotting = False
+
 # parameter to scan and its values
-param_name = 'V4'
-param_values = np.linspace(0.1, 10., 10)
+param_name = 'V1'
+param_values = np.linspace(0.01, .5, 25)
+decimal_places = 3 # for printing parameter values and steady states
 
 sstates, max_reals = scan_param(param_name, param_values, [P_0, Q_0, R_0], param_dict)
+for state, p, i in zip(max_reals, param_values, range(len(param_values))):
+    if state < 0:
+        print(f'Stable steady state at {param_name}={np.round(p, decimal_places)}: P={np.round(sstates[i,0], decimal_places)}, Q={np.round(sstates[i,1], decimal_places)}, R={np.round(sstates[i,2], decimal_places)}')
 
+if disable_plotting:
+    exit(0)
+
+# ---- Plot steady states and min/max values of variables during time course ----  
 fig = plt.figure()
 gs = fig.add_gridspec(3, hspace=0.1)
 axs = gs.subplots(sharex=True)
@@ -89,7 +101,7 @@ for i, p in enumerate(param_values):
         axs[j].scatter(i+1, sstates[i,j], color=c, marker='*', s=10) # steady state
 
 for i in range(3):
-    axs[i].set_xticks(range(1,11), [np.round(v,1) for v in param_values])
+    axs[i].set_xticks(range(1,len(param_values)+1), [np.round(v,2) for v in param_values], rotation=45)
 
 axs[0].set(xlabel=f'{param_name}', ylabel='P')
 axs[1].set(xlabel=f'{param_name}', ylabel='Q')
