@@ -28,6 +28,7 @@ def R_ss(P):
     """
     def f(R):
         return param_dict['V3'] * P * (1 - R)/(param_dict['K3'] + (1 - R)) - param_dict['V4'] * R/(param_dict['K4'] + R)
+
     R_guess = 1.0
     R_solution, info, ier, mesg = fsolve(f, R_guess, full_output=True)
     return R_solution, ier
@@ -79,3 +80,4 @@ axes[1].set_title('Threshold: Q vs R')
 axes[1].grid(True)
 
 plt.savefig('figures/figure_2_thresholds.png', dpi=300)
+
